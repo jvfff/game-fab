@@ -1719,7 +1719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1020663868}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: peDoPersonagem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1735,7 +1735,7 @@ Transform:
   m_GameObject: {fileID: 1020663867}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.408, y: -1.5, z: 0}
+  m_LocalPosition: {x: -0.47, y: -1.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1958,7 +1958,7 @@ GameObject:
   - component: {fileID: 1587908332}
   - component: {fileID: 1587908336}
   - component: {fileID: 1587908337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2026,8 +2026,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.39, y: 0.04076898}
-  m_Radius: 1.5951279
+  m_Offset: {x: -0.39, y: 0.1654669}
+  m_Radius: 1.47043
 --- !u!212 &1587908334
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2092,7 +2092,7 @@ Transform:
   m_GameObject: {fileID: 1587908331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.08, y: 1.21, z: 0}
+  m_LocalPosition: {x: -4.33, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

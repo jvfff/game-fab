@@ -7,8 +7,8 @@ public class Movimento : MonoBehaviour
 
     [SerializeField] private int velocidade = 5;
 
-    [SerializeField]private Transform peDoPersonagem;
-    [SerializeField]private LayerMask chaoLayer;
+    [SerializeField] private Transform peDoPersonagem;
+    [SerializeField] private LayerMask chaoLayer;
 
     private bool estaNoChao;
     private Animator animator;
@@ -17,6 +17,7 @@ public class Movimento : MonoBehaviour
     private int saltandoHash = Animator.StringToHash("saltando");
 
     private SpriteRenderer spriteRenderer;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,7 +29,7 @@ public class Movimento : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
 
-        if(Input.GetKeyDown(KeyCode.Space) && estaNoChao)
+        if (Input.GetKeyDown(KeyCode.Space) && estaNoChao)
         {
             rb.AddForce(Vector2.up * 600);
         }
@@ -38,15 +39,14 @@ public class Movimento : MonoBehaviour
         animator.SetBool(movendoHash, horizontalInput != 0);
         animator.SetBool(saltandoHash, !estaNoChao);
 
-        if(horizontalInput > 0)
+        if (horizontalInput > 0)
         {
             spriteRenderer.flipX = false;
         }
-        else if(horizontalInput < 0)
+        else if (horizontalInput < 0)
         {
             spriteRenderer.flipX = true;
         }
-
     }
 
     private void FixedUpdate()
