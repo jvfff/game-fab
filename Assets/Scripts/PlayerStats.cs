@@ -6,8 +6,15 @@ public class PlayerStats : MonoBehaviour
     public int vida = 100;
     public bool IsAlive = true;
     public bool IsDamage;
-
+    private Parry parryRef;
+    public int damage = 30;
     private float logTimer = 0f;
+
+
+    private void Awake()
+    {
+        parryRef = GetComponent<Parry>();
+    }
 
     void Update()
     {
@@ -30,6 +37,11 @@ public class PlayerStats : MonoBehaviour
         {
             Death();
         }
+
+        if (parryRef.buffar)
+        {
+            IsBuffed();
+        }else { NormalState(); }
     }
 
     public void TomeiDano(int damage)
@@ -57,5 +69,15 @@ public class PlayerStats : MonoBehaviour
         yield return new WaitForSeconds(1f);
         IsDamage = false;
         Debug.Log("Jogador pode agir novamente.");
+    }
+
+    private void IsBuffed()
+    {
+        damage = damage + 20;
+    }
+
+    private void NormalState()
+    {
+        damage = 30;
     }
 }

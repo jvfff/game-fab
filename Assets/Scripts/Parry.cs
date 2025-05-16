@@ -5,7 +5,7 @@ public class Parry : MonoBehaviour
     public Movimento movimentoRef; // Referência ao script do personagem
     private Collider2D ParryCollider;
     public bool Acaba;
-  
+    public bool buffar = false;
 
     private void Awake()
     {
@@ -36,6 +36,7 @@ public class Parry : MonoBehaviour
     {
         ParryCollider.enabled = true;
         movimentoRef.NoParry = true;
+        buffar = true;
     }
 
     // Chamado via Animation Event
@@ -43,5 +44,6 @@ public class Parry : MonoBehaviour
     {
         movimentoRef.NoParry = false;
         ParryCollider.enabled = false;
+        buffar = false;
     }
 }
