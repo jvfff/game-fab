@@ -6,7 +6,7 @@ public class Movimento : MonoBehaviour
     private Rigidbody2D rb;
 
     [SerializeField] private int velocidade = 5;
-    [SerializeField] private int velocidadeAtaque = 2;  // velocidade reduzida no ataque
+    [SerializeField] private int velocidadeAtaque = 2;
 
     [SerializeField] private Transform peDoPersonagem;
     [SerializeField] private LayerMask chaoLayer;
@@ -19,7 +19,6 @@ public class Movimento : MonoBehaviour
     private int attackHash = Animator.StringToHash("atacando");
 
     private SpriteRenderer spriteRenderer;
-
     private bool estaAtacando = false;
 
     void Awake()
@@ -31,18 +30,17 @@ public class Movimento : MonoBehaviour
 
     void Update()
     {
-        // Input de ataque - só se não estiver atacando
+        // Ataque: permitido apenas se não estiver atacando
         if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
         {
             animator.SetTrigger(attackHash);
             estaAtacando = true;
-            return; // não executa mais ações nesse frame
         }
 
-        // Movimento lateral
+        // Movimento lateral (permitido sempre)
         horizontalInput = Input.GetAxis("Horizontal");
 
-        // Pulo permitido mesmo durante ataque (se quiser bloquear, coloque condição aqui)
+        // Pulo (permitido mesmo durante ataque)
         if (Input.GetKeyDown(KeyCode.Space) && estaNoChao)
         {
             rb.AddForce(Vector2.up * 600);
@@ -57,30 +55,18 @@ public class Movimento : MonoBehaviour
 
         // Virar sprite conforme direção
         if (horizontalInput > 0)
-        {
             spriteRenderer.flipX = false;
-        }
         else if (horizontalInput < 0)
-        {
             spriteRenderer.flipX = true;
-        }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (estaAtacando)
-        {
-            // Durante ataque, reduz a velocidade de movimento para dar fluidez
-            rb.linearVelocity = new Vector2(horizontalInput * velocidadeAtaque, rb.linearVelocity.y);
-        }
-        else
-        {
-            // Movimento normal
-            rb.linearVelocity = new Vector2(horizontalInput * velocidade, rb.linearVelocity.y);
-        }
+        // Movimento com velocidade reduzida durante ataque
+        float velocidadeAtual = estaAtacando ? velocidadeAtaque : velocidade;
+        rb.linearVelocity = new Vector2(horizontalInput * velocidadeAtual, rb.linearVelocity.y);
     }
 
-    // Chamado via Animation Event no final da animação de ataque
     public void TerminarAtaque()
     {
         animator.ResetTrigger(attackHash);
