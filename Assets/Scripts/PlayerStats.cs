@@ -1,20 +1,29 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
     public int vida = 100;
     public bool IsAlive = true;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public bool IsDamage;
 
     private float logTimer = 0f;
 
     void Update()
     {
-        
+        // Teste de dano
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            TomeiDano(20);
+        }
+
         // Evita log spamming a cada frame
         logTimer += Time.deltaTime;
         if (logTimer >= 1f)
+        {
+            Debug.Log($"Vida: {vida} | IsDamage: {IsDamage}");
+            logTimer = 0f;
+        }
 
         // Checa morte
         if (vida <= 0 && IsAlive)
@@ -23,15 +32,12 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TomeiDano(int damage)
     {
-        if (Input.GetKey(KeyCode.K)) { vida = vida - 50; }
-        Console.WriteLine(vida.ToString());
-        if (vida <= 0) { Death(); }
+        if (!IsAlive) return;
 
         vida -= damage;
-        if (!IsDamage) // impede mï¿½ltiplas coroutines em paralelo
+        if (!IsDamage) // impede múltiplas coroutines em paralelo
         {
             StartCoroutine(Delay());
         }
@@ -41,7 +47,7 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("Jogador morreu.");
         IsAlive = false;
-        // Aqui vocï¿½ pode adicionar lï¿½gica de desativar controles, animaï¿½ï¿½es, etc.
+        // Aqui você pode adicionar lógica de desativar controles, animações, etc.
     }
 
     private IEnumerator Delay()
