@@ -1,17 +1,16 @@
-using System;
-using UnityEditor.EditorTools;
+using System.Collections;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
-
     PlayerStats status;
     GameObject player;
-    
+
     public GameObject panelMenu;
     public GameObject panelPause;
     public GameObject panelGameOver;
-    
+
+    private bool isGameOverTriggered = false;
 
     void Awake()
     {
@@ -23,17 +22,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     void Update()
     {
-        if (status != null && !status.IsAlive)
+        if (status != null && !status.IsAlive && !isGameOverTriggered)
         {
-            GameOver();
+            isGameOverTriggered = true;
+            StartCoroutine(GameOverDelay());
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) { PauseGame(); }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
+        }
     }
 
+    private IEnumerator GameOverDelay()
+    {
+        Debug.Log("Morte detectada. Esperando 1.5 segundos...");
+        yield return new WaitForSeconds(1.5f);
+        GameOver();
+    }
 
     private void GameOver()
     {
@@ -41,13 +49,13 @@ public class GameManager : MonoBehaviour
         panelPause.SetActive(false);
         panelMenu.SetActive(false);
         Debug.Log("Você morreu");
-        ResetGame();
+        CarregarJogo();
     }
 
-    private void ResetGame()
+    /*private void ResetGame()
     {
-
-    }
+        // Aqui você pode colocar lógica para reiniciar variáveis ou cenas
+    }*/
 
     private void PauseGame()
     {
@@ -67,25 +75,31 @@ public class GameManager : MonoBehaviour
         panelMenu.SetActive(true);
         panelPause.SetActive(false);
         panelGameOver.SetActive(false);
+        isGameOverTriggered = false;
+    }
+    public void CarregarJogo()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("TestMove"); // Substitua pelo nome real da sua cena
     }
 
     public void IniciarJogo()
     {
-        //essa função tem q carregar a cena
         panelMenu.SetActive(false);
         panelPause.SetActive(false);
         panelGameOver.SetActive(false);
         Time.timeScale = 1;
+        isGameOverTriggered = false;
     }
 
     public void SairDoJogo()
     {
         Debug.Log("Saindo do jogo...");
 
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;  // Fecha o modo Play no Editor
-        #else
-        Application.Quit();  // Fecha o jogo compilado
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movimento : MonoBehaviour
@@ -10,6 +11,9 @@ public class Movimento : MonoBehaviour
 
     [SerializeField] private Transform peDoPersonagem;
     [SerializeField] private LayerMask chaoLayer;
+    /*
+    public Collider2D ParryCollider;
+    private int ParryHash = Animator.StringToHash("parry");*/
 
     private bool estaNoChao;
     private Animator animator;
@@ -17,30 +21,43 @@ public class Movimento : MonoBehaviour
     private int movendoHash = Animator.StringToHash("movendo");
     private int saltandoHash = Animator.StringToHash("saltando");
     private int attackHash = Animator.StringToHash("atacando");
+    private int ParryHash = Animator.StringToHash("parry");
 
+
+    public Parry parryRef;
     private SpriteRenderer spriteRenderer;
 
-    private bool estaAtacando = false;
+    public bool estaAtacando = false;
+    public bool NoParry = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        parryRef = GetComponent<Parry>();
     }
 
     void Update()
     {
         // Input de ataque - só se não estiver atacando
-        if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
+        if (!estaAtacando && !NoParry && Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0))//O mouse0 é o botao direito no mouse ai vai da escolha oq preferem manter
         {
             animator.SetTrigger(attackHash);
             estaAtacando = true;
             return; // não executa mais ações nesse frame
         }
 
-        // Movimento lateral
-        horizontalInput = Input.GetAxis("Horizontal");
+        if (NoParry)
+        {
+            //animator.SetTrigger(ParryHash);
+            Debug.Log("Foi no movimento");
+            return;
+            
+        }
+
+    // Movimento lateral
+    horizontalInput = Input.GetAxis("Horizontal");
 
         // Pulo permitido mesmo durante ataque (se quiser bloquear, coloque condição aqui)
         if (Input.GetKeyDown(KeyCode.Space) && estaNoChao)
@@ -68,7 +85,7 @@ public class Movimento : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (estaAtacando)
+        if (estaAtacando || NoParry)
         {
             // Durante ataque, reduz a velocidade de movimento para dar fluidez
             rb.linearVelocity = new Vector2(horizontalInput * velocidadeAtaque, rb.linearVelocity.y);
@@ -86,4 +103,14 @@ public class Movimento : MonoBehaviour
         animator.ResetTrigger(attackHash);
         estaAtacando = false;
     }
-}
+
+    /*  private void OnTriggerEnter2D(Collider2D collision)
+      {
+         if(collision.CompareTag("Ataque"))
+          {
+              Debug.Log("Parry Foi")
+          }
+      }*/
+  
+  
+    }
