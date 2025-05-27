@@ -6,18 +6,18 @@ public class PlayerStats : MonoBehaviour
     public int vida = 100;
     public bool IsAlive = true;
     public bool IsDamage;
-    private Parry parryRef;
     public int damage = 30;
     private float logTimer = 0f;
-
+    private bool buff;
 
     private void Awake()
     {
-        parryRef = GetComponent<Parry>();
+        //parryRef = GetComponent<Parry>();
     }
 
     void Update()
     {
+        
         // Teste de dano
         if (Input.GetKeyDown(KeyCode.K))
         {
@@ -38,10 +38,10 @@ public class PlayerStats : MonoBehaviour
             Death();
         }
 
-        if (parryRef.buffar)
+        /*if (buff)
         {
             IsBuffed();
-        }else { NormalState(); }
+        }else { NormalState(); }*/
     }
 
     public void TomeiDano(int damage)

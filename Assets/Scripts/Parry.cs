@@ -12,6 +12,7 @@ public class Parry : MonoBehaviour
        
         ParryCollider = GetComponent<Collider2D>(); // ou GetComponentInChildren se necessário
         ParryCollider.enabled = false; // começa desativado
+        
     }
 
     private void Update()
@@ -21,6 +22,8 @@ public class Parry : MonoBehaviour
             parry();
         }
         if (Acaba || Input.GetKeyDown(KeyCode.I)) { Fparry(); }
+
+        OnTriggerEnter2D(ParryCollider);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
