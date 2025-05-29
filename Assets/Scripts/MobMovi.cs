@@ -2,22 +2,28 @@ using UnityEngine;
 
 public class MovimentoMob : MonoBehaviour
 {
-    private float direcao = 1f;
     private Rigidbody2D rb;
 
-    [SerializeField] private int velocidade = 3;
-
+    [SerializeField] private float velocidade = 3f;
     [SerializeField] private Transform peDoMob;
     [SerializeField] private LayerMask chaoLayer;
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private float distanciaDeteccao = 5f;
+    [SerializeField] private float tempoMinimoParaVirar = 0.5f;
+    [SerializeField] private Transform sensorParede; // <- Adicionado
 
-    private bool estaNoChao;
+    private float direcao = 1f;
+    private float tempoDesdeUltimaVirada = 0f;
+
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private Transform jogador;
 
     private int voandoHash = Animator.StringToHash("voando");
     private int atacandoHash = Animator.StringToHash("atacando");
     private int recebendoHitHash = Animator.StringToHash("recebendoHit");
 
-    private SpriteRenderer spriteRenderer;
+    private bool detectouParede = false;
 
     void Awake()
     {
@@ -28,38 +34,77 @@ public class MovimentoMob : MonoBehaviour
 
     void Update()
     {
-        estaNoChao = Physics2D.OverlapCircle(peDoMob.position, 0.2f, chaoLayer);
+        tempoDesdeUltimaVirada += Time.deltaTime;
 
-        // A abelha está sempre voando (você pode ligar/desligar conforme lógica)
-        animator.SetBool(voandoHash, true);
+        // Detecta jogador próximo
+        Collider2D jogadorDetectado = Physics2D.OverlapCircle(transform.position, distanciaDeteccao, playerLayer);
+        if (jogadorDetectado != null)
+        {
+            jogador = jogadorDetectado.transform;
+            float direcaoDesejada = Mathf.Sign(jogador.position.x - transform.position.x);
 
-        // Virar sprite conforme direção
+            if (direcao != direcaoDesejada && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
+            {
+                Virar();
+                direcao = direcaoDesejada;
+            }
+        }
+
+        // Verifica se tem chão à frente
+        Vector2 origemRaycast = (Vector2)peDoMob.position + new Vector2(direcao * 0.3f, 0);
+        bool temChao = Physics2D.Raycast(origemRaycast, Vector2.down, 0.5f, chaoLayer);
+
+        if (!temChao && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
+        {
+            Virar();
+            direcao *= -1f;
+        }
+
+        // Sensor parede detectou algo
+        if (detectouParede && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
+        {
+            Virar();
+            direcao *= -1f;
+            detectouParede = false;
+        }
+
+        // Flip do sprite
         spriteRenderer.flipX = direcao < 0;
+
+        animator.SetBool(voandoHash, true);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(direcao * velocidade, rb.linearVelocity.y);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void SensorParedeDetectou()
     {
-        if (collision.CompareTag("Parede") || collision.CompareTag("Limite"))
-        {
-            direcao *= -1f;
-        }
+        detectouParede = true;
     }
 
-    // Método público para disparar ataque, pode ser chamado pela IA ou outro script
     public void Atacar()
     {
         animator.SetTrigger(atacandoHash);
     }
 
-    // Método público para disparar hit, pode ser chamado quando receber dano
     public void ReceberHit()
     {
         animator.SetTrigger(recebendoHitHash);
+    }
+
+    private void Virar()
+    {
+        tempoDesdeUltimaVirada = 0f;
+
+        // Inverter a posição local do sensorParede
+        if (sensorParede != null)
+        {
+            Vector3 localPos = sensorParede.localPosition;
+            localPos.x *= -1f;
+            sensorParede.localPosition = localPos;
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -68,6 +113,13 @@ public class MovimentoMob : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(peDoMob.position, 0.2f);
+
+            Vector2 origem = (Vector2)peDoMob.position + Vector2.right * direcao * 0.3f;
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(origem, origem + Vector2.down * 0.5f);
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, distanciaDeteccao);
         }
     }
 }
