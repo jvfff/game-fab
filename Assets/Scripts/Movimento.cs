@@ -24,7 +24,6 @@ public class Movimento : MonoBehaviour
     private int attackHash = Animator.StringToHash("atacando");
 
     private SpriteRenderer spriteRenderer;
-
     private bool estaAtacando = false;
 
     void Awake()
@@ -36,16 +35,17 @@ public class Movimento : MonoBehaviour
 
     void Update()
     {
+        // Input de ataque - só se não estiver atacando
         if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
         {
             animator.SetTrigger(attackHash);
             estaAtacando = true;
-            CausarDano(); // Executa durante a animação, ou pode ser chamado via AnimationEvent
-            return;
         }
 
+        // Movimento lateral (permitido sempre)
         horizontalInput = Input.GetAxis("Horizontal");
 
+        // Pulo (permitido mesmo durante ataque)
         if (Input.GetKeyDown(KeyCode.Space) && estaNoChao)
         {
             rb.AddForce(Vector2.up * 600);
@@ -56,59 +56,18 @@ public class Movimento : MonoBehaviour
         animator.SetBool(movendoHash, horizontalInput != 0);
         animator.SetBool(saltandoHash, !estaNoChao);
 
-        if (horizontalInput > 0) spriteRenderer.flipX = false;
-        else if (horizontalInput < 0) spriteRenderer.flipX = true;
-
-        // Aqui adicionamos a inversão do pontoDeAtaque de acordo com o flip do sprite
-        if (pontoDeAtaque != null)
-        {
-            Vector3 localPos = pontoDeAtaque.localPosition;
-            localPos.x = Mathf.Abs(localPos.x) * (spriteRenderer.flipX ? -1 : 1);
-            pontoDeAtaque.localPosition = localPos;
-        }
+        // Virar sprite conforme direção
+        if (horizontalInput > 0)
+            spriteRenderer.flipX = false;
+        else if (horizontalInput < 0)
+            spriteRenderer.flipX = true;
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (estaAtacando)
-        {
-            rb.linearVelocity = new Vector2(horizontalInput * velocidadeAtaque, rb.linearVelocity.y);
-        }
-        else
-        {
-            rb.linearVelocity = new Vector2(horizontalInput * velocidade, rb.linearVelocity.y);
-        }
-    }
-
-    private void CausarDano()
-    {
-        if (pontoDeAtaque == null)
-        {
-            Debug.LogWarning("Ponto de ataque não atribuído!");
-            return;
-        }
-
-        Vector2 posAtaque = pontoDeAtaque.position;
-        float raioAtaque = 0.5f;
-
-        Collider2D[] hits = Physics2D.OverlapCircleAll(posAtaque, raioAtaque, mobLayer);
-        Debug.Log($"CausarDano: {hits.Length} colisores detectados.");
-
-        foreach (Collider2D hit in hits)
-        {
-            Debug.Log("Detectado: " + hit.gameObject.name);
-
-            MobVida mobVida = hit.GetComponent<MobVida>();
-            if (mobVida != null)
-            {
-                mobVida.TomarDano(1);
-                Debug.Log("Dano aplicado ao mob!");
-            }
-            else
-            {
-                Debug.Log("MobVida não encontrado nesse objeto.");
-            }
-        }
+        // Movimento com velocidade reduzida durante ataque
+        float velocidadeAtual = estaAtacando ? velocidadeAtaque : velocidade;
+        rb.linearVelocity = new Vector2(horizontalInput * velocidadeAtual, rb.linearVelocity.y);
     }
 
     public void TerminarAtaque()
