@@ -1,45 +1,23 @@
 using UnityEngine;
 
-public class MobVida : MonoBehaviour
+public class Inimigo : MonoBehaviour
 {
-    [SerializeField] private int vidaMaxima = 3;
-    private int vidaAtual;
-
-    private Animator animator;
-    private int recebendoHitHash;
-
-    private bool morto = false;
-
-    void Start()
-    {
-        vidaAtual = vidaMaxima;
-        animator = GetComponent<Animator>();
-        recebendoHitHash = Animator.StringToHash("recebendoHit");
-    }
+    [SerializeField] private int vida = 3;
 
     public void TomarDano(int dano)
     {
-        Debug.Log($"TomarDano chamado, dano: {dano}");
-        if (morto) return;
+        vida -= dano;
+        Debug.Log("Inimigo tomou dano! Vida restante: " + vida);
 
-        vidaAtual -= dano;
-
-        if (animator != null)
-            animator.SetTrigger(recebendoHitHash);
-
-        if (vidaAtual <= 0)
+        if (vida <= 0)
         {
             Morrer();
         }
     }
 
-
-    private void Morrer()
+    void Morrer()
     {
-        morto = true;
-
-        // Aqui você pode tocar uma animação de morte se tiver
-        // ou diretamente destruir o mob:
-        Destroy(gameObject, 0.5f); // espera meio segundo para destruir
+        Debug.Log("Inimigo morreu!");
+        Destroy(gameObject);
     }
 }

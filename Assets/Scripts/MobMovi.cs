@@ -3,14 +3,17 @@ using UnityEngine;
 public class MovimentoMob : MonoBehaviour
 {
     private Rigidbody2D rb;
+    [SerializeField] private float tempoMinimoParaVirar = 0.5f;
 
     [SerializeField] private float velocidade = 3f;
     [SerializeField] private Transform peDoMob;
     [SerializeField] private LayerMask chaoLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private float distanciaDeteccao = 5f;
-    [SerializeField] private float tempoMinimoParaVirar = 0.5f;
-    [SerializeField] private Transform sensorParede; // <- Adicionado
+    [SerializeField] private float alcanceAtaque = 1.5f;         // alcance do ataque
+    [SerializeField] private float cooldownAtaque = 2f;           // tempo entre ataques
+    [SerializeField] private Transform sensorParede;
+    [SerializeField] private HitboxAtaqueMob hitboxAtaque; 
 
     private float direcao = 1f;
     private float tempoDesdeUltimaVirada = 0f;
@@ -25,6 +28,8 @@ public class MovimentoMob : MonoBehaviour
 
     private bool detectouParede = false;
 
+    private float timerCooldownAtaque = 0f;     // contador do cooldown
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,12 +40,18 @@ public class MovimentoMob : MonoBehaviour
     void Update()
     {
         tempoDesdeUltimaVirada += Time.deltaTime;
+        timerCooldownAtaque += Time.deltaTime;
 
-        // Detecta jogador próximo
+        // Detecta jogador
         Collider2D jogadorDetectado = Physics2D.OverlapCircle(transform.position, distanciaDeteccao, playerLayer);
         if (jogadorDetectado != null)
         {
             jogador = jogadorDetectado.transform;
+            float distanciaParaJogador = Vector2.Distance(jogador.position, transform.position);
+
+            Debug.Log("Jogador detectado a distância: " + distanciaParaJogador);
+            Debug.Log($"Distância para jogador: {distanciaParaJogador}, Cooldown: {timerCooldownAtaque}");
+
             float direcaoDesejada = Mathf.Sign(jogador.position.x - transform.position.x);
 
             if (direcao != direcaoDesejada && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
@@ -48,9 +59,24 @@ public class MovimentoMob : MonoBehaviour
                 Virar();
                 direcao = direcaoDesejada;
             }
+
+            bool podeAtacar = distanciaParaJogador <= alcanceAtaque && timerCooldownAtaque >= cooldownAtaque;
+            Debug.Log($"Condição para atacar: {podeAtacar} (Distância: {distanciaParaJogador} <= {alcanceAtaque}, Cooldown: {timerCooldownAtaque} >= {cooldownAtaque})");
+
+            if (podeAtacar)
+            {
+                Atacar();
+                timerCooldownAtaque = 0f;
+            }
+
+        }
+        else
+        {
+            Debug.Log("Jogador não detectado");
+            jogador = null;  // jogador saiu do alcance
         }
 
-        // Verifica se tem chão à frente
+        // Verifica chão à frente
         Vector2 origemRaycast = (Vector2)peDoMob.position + new Vector2(direcao * 0.3f, 0);
         bool temChao = Physics2D.Raycast(origemRaycast, Vector2.down, 0.5f, chaoLayer);
 
@@ -60,7 +86,6 @@ public class MovimentoMob : MonoBehaviour
             direcao *= -1f;
         }
 
-        // Sensor parede detectou algo
         if (detectouParede && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
         {
             Virar();
@@ -68,9 +93,7 @@ public class MovimentoMob : MonoBehaviour
             detectouParede = false;
         }
 
-        // Flip do sprite
         spriteRenderer.flipX = direcao < 0;
-
         animator.SetBool(voandoHash, true);
     }
 
@@ -86,7 +109,23 @@ public class MovimentoMob : MonoBehaviour
 
     public void Atacar()
     {
+        Debug.Log("🟠 Mob atacando!");
         animator.SetTrigger(atacandoHash);
+
+        if (hitboxAtaque != null)
+        {
+            hitboxAtaque.AtivarHitbox();
+            Invoke(nameof(DesativarHitbox), 0.3f);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ HitboxAtaqueMob não atribuída no Inspector.");
+        }
+    }
+
+    private void DesativarHitbox()
+    {
+        hitboxAtaque?.DesativarHitbox();
     }
 
     public void ReceberHit()
@@ -98,7 +137,6 @@ public class MovimentoMob : MonoBehaviour
     {
         tempoDesdeUltimaVirada = 0f;
 
-        // Inverter a posição local do sensorParede
         if (sensorParede != null)
         {
             Vector3 localPos = sensorParede.localPosition;

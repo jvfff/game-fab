@@ -36,11 +36,19 @@ public class Movimento : MonoBehaviour
     void Update()
     {
         // Input de ataque - só se não estiver atacando
-        if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
-        {
-            animator.SetTrigger(attackHash);
-            estaAtacando = true;
-        }
+       if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
+{
+    animator.SetTrigger(attackHash);
+    estaAtacando = true;
+
+    // Detecta inimigos na área de ataque
+    Collider2D[] inimigosAcertados = Physics2D.OverlapCircleAll(pontoDeAtaque.position, 0.5f, mobLayer);
+    foreach (Collider2D inimigo in inimigosAcertados)
+    {
+        inimigo.GetComponent<Inimigo>()?.TomarDano(1);
+    }
+}
+
 
         // Movimento lateral (permitido sempre)
         horizontalInput = Input.GetAxis("Horizontal");

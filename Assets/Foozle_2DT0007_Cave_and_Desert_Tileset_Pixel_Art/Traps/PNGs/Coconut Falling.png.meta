@@ -334,7 +334,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Coconut Falling_0: -5526362205095702739
+      Coconut Falling_1: 7506644700468714263
+      Coconut Falling_2: -637558345666005386
+      Coconut Falling_3: 6991296668500478269
+      Coconut Falling_4: -5109356360251830816
+      Coconut Falling_5: 6585073820794866728
+      Coconut Falling_6: -352882430931298010
+      Coconut Falling_7: 4635979439477647319
+      Coconut Falling_8: 47233470507974132
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Standing Torch_0: 3356408537948147003
+      Standing Torch_1: 2459891189952295336
+      Standing Torch_2: -3182899083312092619
+      Standing Torch_3: -4088826912467424549
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

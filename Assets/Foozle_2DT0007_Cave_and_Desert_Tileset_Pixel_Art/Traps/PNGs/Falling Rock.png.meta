@@ -534,7 +534,24 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Falling Rock_0: -3041518545462984696
+      Falling Rock_1: -2997235018418354563
+      Falling Rock_10: -1911283209982520698
+      Falling Rock_11: -5557175217209576510
+      Falling Rock_12: -7199235420932403805
+      Falling Rock_13: 5136800918023116501
+      Falling Rock_14: 6113605464109801497
+      Falling Rock_15: -7733649986080517912
+      Falling Rock_16: 1595003789407545657
+      Falling Rock_2: 4614092519081305651
+      Falling Rock_3: 3137632714693613180
+      Falling Rock_4: -6728749274877325689
+      Falling Rock_5: 8044301891513196100
+      Falling Rock_6: 6652359241958283968
+      Falling Rock_7: 2532361586176707193
+      Falling Rock_8: 7543201737835346485
+      Falling Rock_9: 1189435917397939133
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
