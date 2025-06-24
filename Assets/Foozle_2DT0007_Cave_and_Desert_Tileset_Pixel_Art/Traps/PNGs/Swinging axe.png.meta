@@ -409,7 +409,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Swinging axe_0: -8762642664389814670
+      Swinging axe_1: -4463572223065646980
+      Swinging axe_10: -8643427390098129467
+      Swinging axe_11: -6039719106796836525
+      Swinging axe_2: 380102807867603147
+      Swinging axe_3: -5551835437307991985
+      Swinging axe_4: 409789954111904156
+      Swinging axe_5: -7196308997406017384
+      Swinging axe_6: -318892274255716785
+      Swinging axe_7: -2037446137841723004
+      Swinging axe_8: 8474400640221753223
+      Swinging axe_9: -9061805943379244982
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

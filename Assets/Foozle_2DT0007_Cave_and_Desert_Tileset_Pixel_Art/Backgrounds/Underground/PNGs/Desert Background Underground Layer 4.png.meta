@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Desert Background Underground Layer 4_0: -1640433625840494082
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
