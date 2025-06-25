@@ -7,16 +7,17 @@ public class LoadingScreen : MonoBehaviour
 {
     public Slider barraDeProgresso;
     public Text textoPorcentagem; // opcional
-    public GameManager GameManager;
+    public Index index;
+    public int indexP;
+
     private void Awake()
     {
-        GameManager = gameObject.GetComponent<GameManager>();
+        index = GetComponent<Index>();
+        indexP = index.indexV;
     }
-
-
     void Start()
     {
-        if(GameManager.index == 0) { CarregarCena("Caverna"); }
+        if(indexP == 0) { CarregarCena("Caverna"); }
         else { CarregarCena("Deserto"); }
     }
 

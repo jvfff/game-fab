@@ -5,6 +5,7 @@ public class Movimento : MonoBehaviour
 {
     private float horizontalInput;
     private Rigidbody2D rb;
+    public int dano = 1;
 
     [SerializeField] private int velocidade = 5;
     [SerializeField] private int velocidadeAtaque = 2;
@@ -45,7 +46,7 @@ public class Movimento : MonoBehaviour
     Collider2D[] inimigosAcertados = Physics2D.OverlapCircleAll(pontoDeAtaque.position, 0.5f, mobLayer);
     foreach (Collider2D inimigo in inimigosAcertados)
     {
-        inimigo.GetComponent<Inimigo>()?.TomarDano(1);
+        inimigo.GetComponent<Inimigo>()?.TomarDano(dano);
     }
 }
 

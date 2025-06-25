@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 
     PlayerStats status;
     GameObject player;
-    public int index = 0;
 
     public GameObject panelMenu;
     public GameObject panelPause;

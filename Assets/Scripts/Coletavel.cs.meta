@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b3120fd13b824f547a7de92026328d47
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - spriteRenderer: {instanceID: 0}
+  - spriteEstrela: {fileID: -7768905624368710406, guid: 3ad4aae35b7981e4698c0a5e76487548, type: 3}
+  - spritePocao: {fileID: -5766695838393623057, guid: ee13639f46474bd44b87b94145290c36, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
