@@ -1,11 +1,29 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
     public float vida = 100;
     public bool IsAlive = true;
+    public int potion = 3;
+    private int danoOriginal;
+
+    public Movimento movimento;
+
+    public float tempoDuracao = 15f;
+    private bool pocaoAtiva = false;
 
     [SerializeField] public Transform HealthBar;
+
+    private void Awake()
+    {
+        movimento = GetComponent<Movimento>();
+    }
+    void Start()
+    {
+
+        danoOriginal = movimento.dano;
+    }
 
     void Update()
     {
@@ -15,6 +33,8 @@ public class PlayerStats : MonoBehaviour
         {
             TomarDano(50);
         }
+
+        if (Input.GetKeyDown(KeyCode.E)) TomarPocao();
     }
 
     // Método público para reduzir vida
@@ -48,4 +68,42 @@ public class PlayerStats : MonoBehaviour
 
         // Aqui você pode adicionar lógica para game over, animação, reset, etc.
     }
+
+    //Efeito da poção
+    /*Tem pot? se tiver dobra o dano do personagem durante 15seg tempo se n tiver nada ocorre*/
+    public void TomarPocao()
+    {
+        if (potion > 0 && !pocaoAtiva)
+        {
+            potion--;
+            StartCoroutine(EfeitoPocao());
+        }
+        else if (pocaoAtiva)
+        {
+            Debug.Log("Poção já está ativa.");
+        }
+        else
+        {
+            Debug.Log("Sem poções!");
+        }
+    }
+
+    private IEnumerator EfeitoPocao()
+    {
+        pocaoAtiva = true;
+        movimento.dano *= 3;
+        float tempoRestante = tempoDuracao;
+
+        while (tempoRestante > 0)
+        {
+            Debug.Log("Poção ativa por mais " + tempoRestante.ToString("F1") + "s");
+            yield return new WaitForSeconds(1f);
+            tempoRestante -= 1f;
+        }
+
+        movimento.dano = danoOriginal;
+        pocaoAtiva = false;
+        Debug.Log("Efeito da poção acabou.");
+    }
+
 }

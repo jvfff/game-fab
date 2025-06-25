@@ -4,6 +4,7 @@ public class Movimento : MonoBehaviour
 {
     private float horizontalInput;
     private Rigidbody2D rb;
+    public int dano = 1;
 
     [SerializeField] private int velocidade = 5;
     [SerializeField] private int velocidadeAtaque = 2;
@@ -33,13 +34,19 @@ public class Movimento : MonoBehaviour
 
     void Update()
     {
-        // Ataque
-        if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
-        {
-            animator.SetTrigger(attackHash);
-            estaAtacando = true;
-            danoJaAplicado = false;
-        }
+        // Input de ataque - só se não estiver atacando
+       if (!estaAtacando && Input.GetKeyDown(KeyCode.Z))
+{
+    animator.SetTrigger(attackHash);
+    estaAtacando = true;
+
+    // Detecta inimigos na área de ataque
+    Collider2D[] inimigosAcertados = Physics2D.OverlapCircleAll(pontoDeAtaque.position, 0.5f, mobLayer);
+    foreach (Collider2D inimigo in inimigosAcertados)
+    {
+        inimigo.GetComponent<Inimigo>()?.TomarDano(dano);
+    }
+}
 
         // Movimento lateral
         horizontalInput = Input.GetAxis("Horizontal");

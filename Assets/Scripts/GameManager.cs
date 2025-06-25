@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 
     PlayerStats status;
     GameObject player;
-    
+
     public GameObject panelMenu;
     public GameObject panelPause;
     public GameObject panelGameOver;
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     private void ResetGame()
     {
-
+        
     }
 
     private void PauseGame()

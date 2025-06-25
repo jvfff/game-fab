@@ -1,8 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class HitboxAtaqueMob : MonoBehaviour
 {
-    [SerializeField] private int dano = 1;
+    [SerializeField] public int dano = 1;
     private bool ativo = false;
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -45,4 +46,6 @@ public class HitboxAtaqueMob : MonoBehaviour
         gameObject.SetActive(false);
         Debug.Log("⬛ Hitbox desativada");
     }
+
+    
 }

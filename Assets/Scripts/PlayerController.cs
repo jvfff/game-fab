@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 10f;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
+    
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -47,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
+
+    
 
     // Detecta se está tocando o chão
     private void OnCollisionEnter2D(Collision2D collision)
