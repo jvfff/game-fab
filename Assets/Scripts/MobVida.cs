@@ -7,7 +7,7 @@ public class Inimigo : MonoBehaviour
     public void TomarDano(int dano)
     {
         vida -= dano;
-        Debug.Log("Inimigo tomou dano! Vida restante: " + vida);
+        Debug.Log($"🗡️ {gameObject.name} tomou {dano} de dano! Vida restante: {vida}");
 
         if (vida <= 0)
         {
@@ -17,7 +17,7 @@ public class Inimigo : MonoBehaviour
 
     void Morrer()
     {
-        Debug.Log("Inimigo morreu!");
+        Debug.Log($"💀 {gameObject.name} morreu!");
         Destroy(gameObject);
     }
 }

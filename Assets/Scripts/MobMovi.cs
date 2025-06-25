@@ -30,6 +30,9 @@ public class MovimentoMob : MonoBehaviour
 
     private float timerCooldownAtaque = 0f;     // contador do cooldown
 
+    private float tempoUltimoLogDeteccao = 0f;
+    private float intervaloLogDeteccao = 1f; // 1 segundo entre prints
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -49,8 +52,12 @@ public class MovimentoMob : MonoBehaviour
             jogador = jogadorDetectado.transform;
             float distanciaParaJogador = Vector2.Distance(jogador.position, transform.position);
 
-            Debug.Log("Jogador detectado a distância: " + distanciaParaJogador);
-            Debug.Log($"Distância para jogador: {distanciaParaJogador}, Cooldown: {timerCooldownAtaque}");
+            if (Time.time - tempoUltimoLogDeteccao >= intervaloLogDeteccao)
+            {
+                Debug.Log("👁️ Jogador detectado a distância: " + distanciaParaJogador);
+                Debug.Log($"📏 Distância para jogador: {distanciaParaJogador}, ⏱️ Cooldown: {timerCooldownAtaque}");
+                tempoUltimoLogDeteccao = Time.time;
+            }
 
             float direcaoDesejada = Mathf.Sign(jogador.position.x - transform.position.x);
 
@@ -61,18 +68,26 @@ public class MovimentoMob : MonoBehaviour
             }
 
             bool podeAtacar = distanciaParaJogador <= alcanceAtaque && timerCooldownAtaque >= cooldownAtaque;
-            Debug.Log($"Condição para atacar: {podeAtacar} (Distância: {distanciaParaJogador} <= {alcanceAtaque}, Cooldown: {timerCooldownAtaque} >= {cooldownAtaque})");
+
+            if (Time.time - tempoUltimoLogDeteccao >= intervaloLogDeteccao)
+            {
+                Debug.Log($"🎯 Condição para atacar: {podeAtacar} (Distância: {distanciaParaJogador} <= {alcanceAtaque}, Cooldown: {timerCooldownAtaque} >= {cooldownAtaque})");
+            }
 
             if (podeAtacar)
             {
                 Atacar();
                 timerCooldownAtaque = 0f;
             }
-
         }
         else
         {
-            Debug.Log("Jogador não detectado");
+            if (Time.time - tempoUltimoLogDeteccao >= intervaloLogDeteccao)
+            {
+                Debug.Log("🚫 Jogador não detectado");
+                tempoUltimoLogDeteccao = Time.time;
+            }
+
             jogador = null;  // jogador saiu do alcance
         }
 
