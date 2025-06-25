@@ -4,6 +4,7 @@ public class Movimento : MonoBehaviour
 {
     private float horizontalInput;
     private Rigidbody2D rb;
+    public int dano = 1;
 
     [SerializeField] private int velocidade = 5;
     [SerializeField] private int velocidadeAtaque = 2;

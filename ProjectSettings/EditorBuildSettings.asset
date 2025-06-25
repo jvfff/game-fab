@@ -8,6 +8,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TutorialForest.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene.unity
+    guid: 4458b5e071c7ce444b12decc71eda8f1
+  - enabled: 1
+    path: Assets/Scenes/Caverna.unity
+    guid: d412952b7e7ab274d98066b68097d28b
+  - enabled: 1
+    path: Assets/Scenes/Deserto.unity
+    guid: c4ad2a6d4484aba40ab91aed9fd0706d
+  - enabled: 1
+    path: Assets/Scenes/Floresta.unity
+    guid: 394c526f777486740a1528aca081e445
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

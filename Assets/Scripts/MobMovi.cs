@@ -58,6 +58,8 @@ public class MovimentoMob : MonoBehaviour
                 Debug.Log($"📏 Distância para jogador: {distanciaParaJogador}, ⏱️ Cooldown: {timerCooldownAtaque}");
                 tempoUltimoLogDeteccao = Time.time;
             }
+            //Debug.Log("Jogador detectado a distância: " + distanciaParaJogador);
+            //Debug.Log($"Distância para jogador: {distanciaParaJogador}, Cooldown: {timerCooldownAtaque}");
 
             float direcaoDesejada = Mathf.Sign(jogador.position.x - transform.position.x);
 
@@ -88,6 +90,7 @@ public class MovimentoMob : MonoBehaviour
                 tempoUltimoLogDeteccao = Time.time;
             }
 
+            //Debug.Log("Jogador não detectado");
             jogador = null;  // jogador saiu do alcance
         }
 
