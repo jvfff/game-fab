@@ -2,35 +2,62 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    //public Transform player;
-    public Vector3 offset = new Vector3(0.1f, 0f, -10f);
-    private Vector3 Player = new Vector3(0f, 0f, 0f);
-    public Vector3 speed;
-    GameObject player;
-    private float smoothTime = 0.25f;
+    public Vector3 offset = new Vector3(0.1f, 0.2f, -10f);
+    public bool usarLimites = true;
+    public float minX = -260f;
+    public float maxX = -180f;
+    public float minY = -15f;
+    public float maxY = 10f;
 
-    private void Awake()
+    private GameObject player;
+    private Vector3 velocity = Vector3.zero;
+    public float smoothTime = 0.25f;
+
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+            Debug.LogWarning("❌ Player não encontrado!");
+        else
+            Debug.Log("✅ Player encontrado: " + player.name);
     }
-    void FixedUpdate()
-    {
-        if (player != null)
-        {
-            //transform.position = player.position + offset;
-            Move();
-        }
 
-    }
-    void Move()
+    private void FixedUpdate()
+{
+    if (player == null)
     {
-        Player = player.transform.position;
-        offset.y = Player.y + 0.2f;
-        offset.x = Player.x;
-        Vector3 targetposition = offset;
-        offset.z = -10f;
-        transform.position = Vector3.SmoothDamp(transform.position, targetposition, ref speed, smoothTime);
-
+        player = GameObject.FindGameObjectWithTag("Player");
+        return;
     }
+
+    Vector3 playerPos = player.transform.position;
+    Vector3 targetPosition = playerPos + offset;
+
+    if (usarLimites)
+    {
+        float cameraHeight = Camera.main.orthographicSize;
+        float cameraWidth = cameraHeight * Camera.main.aspect;
+
+        targetPosition.x = Mathf.Clamp(targetPosition.x, minX + cameraWidth, maxX - cameraWidth);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, minY + cameraHeight, maxY - cameraHeight);
+    }
+
+    targetPosition.z = offset.z;
+    transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
 }
 
+
+    // Gizmos para visualização dos limites no Editor
+    private void OnDrawGizmosSelected()
+    {
+        if (!usarLimites) return;
+
+        Gizmos.color = Color.yellow;
+
+        // Posição e tamanho do retângulo de limites
+        Vector3 centro = new Vector3((minX + maxX) / 2f, (minY + maxY) / 2f, 0f);
+        Vector3 tamanho = new Vector3(Mathf.Abs(maxX - minX), Mathf.Abs(maxY - minY), 0f);
+
+        Gizmos.DrawWireCube(centro, tamanho);
+    }
+}
