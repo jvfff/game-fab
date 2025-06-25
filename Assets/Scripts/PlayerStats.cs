@@ -4,6 +4,7 @@ public class PlayerStats : MonoBehaviour
 {
     public float vida = 100;
     public bool IsAlive = true;
+    
 
     [SerializeField] public Transform HealthBar;
 

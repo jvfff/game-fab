@@ -49,8 +49,8 @@ public class MovimentoMob : MonoBehaviour
             jogador = jogadorDetectado.transform;
             float distanciaParaJogador = Vector2.Distance(jogador.position, transform.position);
 
-            Debug.Log("Jogador detectado a distância: " + distanciaParaJogador);
-            Debug.Log($"Distância para jogador: {distanciaParaJogador}, Cooldown: {timerCooldownAtaque}");
+            //Debug.Log("Jogador detectado a distância: " + distanciaParaJogador);
+            //Debug.Log($"Distância para jogador: {distanciaParaJogador}, Cooldown: {timerCooldownAtaque}");
 
             float direcaoDesejada = Mathf.Sign(jogador.position.x - transform.position.x);
 
@@ -61,7 +61,7 @@ public class MovimentoMob : MonoBehaviour
             }
 
             bool podeAtacar = distanciaParaJogador <= alcanceAtaque && timerCooldownAtaque >= cooldownAtaque;
-            Debug.Log($"Condição para atacar: {podeAtacar} (Distância: {distanciaParaJogador} <= {alcanceAtaque}, Cooldown: {timerCooldownAtaque} >= {cooldownAtaque})");
+            //Debug.Log($"Condição para atacar: {podeAtacar} (Distância: {distanciaParaJogador} <= {alcanceAtaque}, Cooldown: {timerCooldownAtaque} >= {cooldownAtaque})");
 
             if (podeAtacar)
             {
@@ -72,7 +72,7 @@ public class MovimentoMob : MonoBehaviour
         }
         else
         {
-            Debug.Log("Jogador não detectado");
+            //Debug.Log("Jogador não detectado");
             jogador = null;  // jogador saiu do alcance
         }
 
