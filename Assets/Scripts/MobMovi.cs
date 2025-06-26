@@ -30,8 +30,8 @@ public class MovimentoMob : MonoBehaviour
 
     private float timerCooldownAtaque = 0f;     // contador do cooldown
 
-    private float tempoUltimoLogDeteccao = 0f;
-    private float intervaloLogDeteccao = 1f; // 1 segundo entre prints
+    //private float tempoUltimoLogDeteccao = 0f;
+    //private float intervaloLogDeteccao = 1f; // 1 segundo entre prints
 
     void Awake()
     {
