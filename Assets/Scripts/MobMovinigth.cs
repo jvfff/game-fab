@@ -24,6 +24,7 @@ public class MobMovinigth : MonoBehaviour
 
     private bool detectouParede = false;
     private float timerCooldownAtaque = 0f;
+    private bool atacando = false;
 
     void Awake()
     {
@@ -33,75 +34,83 @@ public class MobMovinigth : MonoBehaviour
     }
 
     void Update()
+{
+    tempoDesdeUltimaVirada += Time.deltaTime;
+    timerCooldownAtaque += Time.deltaTime;
+
+    // 1. Se estiver no meio de um ataque, não faz mais nada.
+    if (atacando)
     {
-        tempoDesdeUltimaVirada += Time.deltaTime;
-        timerCooldownAtaque += Time.deltaTime;
+        animator.SetBool("walk", false);
+        animator.SetBool("idle_1", false);
+        return;
+    }
 
-        // DETECÇÃO DE JOGADOR
-        Collider2D jogadorDetectado = Physics2D.OverlapCircle(transform.position, distanciaDeteccao, playerLayer);
-        if (jogadorDetectado != null)
+    // 2. DETECÇÃO DE JOGADOR
+    Collider2D jogadorDetectado = Physics2D.OverlapCircle(transform.position, distanciaDeteccao, playerLayer);
+
+    if (jogadorDetectado != null)
+    {
+        jogador = jogadorDetectado.transform;
+        float distanciaParaJogador = Vector2.Distance(jogador.position, transform.position);
+        float direcaoParaJogador = Mathf.Sign(jogador.position.x - transform.position.x);
+
+        // 3. PRIORIDADE MÁXIMA: LÓGICA DE ATAQUE
+        bool podeAtacar = distanciaParaJogador <= alcanceAtaque && timerCooldownAtaque >= cooldownAtaque;
+
+        if (podeAtacar)
         {
-            jogador = jogadorDetectado.transform;
-            float distanciaParaJogador = Vector2.Distance(jogador.position, transform.position);
-
-            Debug.Log("👀 Jogador detectado: " + jogador.name + ", distância: " + distanciaParaJogador);
-
-            float direcaoDesejada = Mathf.Sign(jogador.position.x - transform.position.x);
-            Debug.Log("Direção desejada: " + direcaoDesejada);
-
-            if (direcao != direcaoDesejada && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
+            // Garante que o mob esteja virado para o jogador ANTES de atacar
+            if (direcao != direcaoParaJogador)
             {
                 Virar();
-                direcao = direcaoDesejada;
             }
-
-            bool podeAtacar = distanciaParaJogador <= alcanceAtaque && timerCooldownAtaque >= cooldownAtaque;
-            Debug.Log("✅ Pode atacar? " + podeAtacar);
-
-            if (podeAtacar)
-            {
-                Atacar();
-                timerCooldownAtaque = 0f;
-            }
-
-            // Definir animação de movimento
-            animator.SetBool("walk", true);
-            animator.SetBool("run", false);
-            animator.SetBool("idle_1", false);
+            Atacar();
+            timerCooldownAtaque = 0f;
         }
-        else
+        else // 4. LÓGICA DE PERSEGUIÇÃO (se não for atacar)
         {
-            jogador = null;
-
-            // Define como parado
-            animator.SetBool("walk", false);
-            animator.SetBool("run", false);
-            animator.SetBool("idle_1", true);
+            // Vira para seguir o jogador se necessário
+            if (direcao != direcaoParaJogador && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
+            {
+                Virar();
+            }
         }
+    }
+    else // 5. LÓGICA DE PATRULHA (se não detectou jogador)
+    {
+        jogador = null;
 
         // VERIFICAÇÃO DE CHÃO
         Vector2 origemRaycast = (Vector2)peDoMob.position + new Vector2(direcao * 0.3f, 0);
         bool temChao = Physics2D.Raycast(origemRaycast, Vector2.down, 0.5f, chaoLayer);
 
-        if (!temChao && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
+        if ((!temChao || detectouParede) && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
         {
             Virar();
-            direcao *= -1f;
+            detectouParede = false; // Reseta o detector de parede após virar
         }
-
-        if (detectouParede && tempoDesdeUltimaVirada >= tempoMinimoParaVirar)
-        {
-            Virar();
-            direcao *= -1f;
-            detectouParede = false;
-        }
-
-        spriteRenderer.flipX = direcao < 0;
     }
+
+    // 6. ANIMAÇÕES (executado sempre que não está atacando)
+    float velocidadeX = Mathf.Abs(rb.linearVelocity.x);
+    if (velocidadeX > 0.1f)
+    {
+        animator.SetBool("walk", true);
+        animator.SetBool("idle_1", false);
+    }
+    else
+    {
+        animator.SetBool("walk", false);
+        animator.SetBool("idle_1", true);
+    }
+}
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(direcao * velocidade, rb.linearVelocity.y);
+        // Se estiver atacando, para de andar
+        float velocidadeFinal = atacando ? 0f : direcao * velocidade;
+        rb.linearVelocity = new Vector2(velocidadeFinal, rb.linearVelocity.y);
     }
 
     public void SensorParedeDetectou()
@@ -112,7 +121,10 @@ public class MobMovinigth : MonoBehaviour
     public void Atacar()
     {
         Debug.Log("🟠 Mob atacando!");
-        animator.SetTrigger("skill_1"); // use "skill_2" se quiser variar
+        animator.SetTrigger("skill_1");
+
+        atacando = true;
+        Invoke(nameof(FimDoAtaque), 0.5f); // tempo da animação
 
         if (hitboxAtaque != null)
         {
@@ -125,6 +137,11 @@ public class MobMovinigth : MonoBehaviour
         }
     }
 
+    private void FimDoAtaque()
+    {
+        atacando = false;
+    }
+
     private void DesativarHitbox()
     {
         hitboxAtaque?.DesativarHitbox();
@@ -132,7 +149,7 @@ public class MobMovinigth : MonoBehaviour
 
     public void ReceberHit()
     {
-        animator.SetTrigger("hit_1"); // ou "hit_2"
+        animator.SetTrigger("hit_1");
     }
 
     public void Morrer()
@@ -148,13 +165,11 @@ public class MobMovinigth : MonoBehaviour
     private void Virar()
     {
         tempoDesdeUltimaVirada = 0f;
+        direcao *= -1f;
 
-        if (sensorParede != null)
-        {
-            Vector3 localPos = sensorParede.localPosition;
-            localPos.x *= -1f;
-            sensorParede.localPosition = localPos;
-        }
+        Vector3 escala = transform.localScale;
+        escala.x = Mathf.Abs(escala.x) * Mathf.Sign(direcao);
+        transform.localScale = escala;
     }
 
     private void OnDrawGizmosSelected()

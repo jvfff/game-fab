@@ -645,15 +645,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000012697796476, guid: ddb8dec8e9dcf304fa398c7cc1bcd40a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012697796476, guid: ddb8dec8e9dcf304fa398c7cc1bcd40a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012697796476, guid: ddb8dec8e9dcf304fa398c7cc1bcd40a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012697796476, guid: ddb8dec8e9dcf304fa398c7cc1bcd40a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -667,6 +667,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114634516062358720, guid: ddb8dec8e9dcf304fa398c7cc1bcd40a, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 647974516}
     - target: {fileID: 210567568684336726, guid: ddb8dec8e9dcf304fa398c7cc1bcd40a, type: 3}
       propertyPath: m_SortingOrder
       value: 2
@@ -863,10 +867,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   distanciaDeteccao: 5
-  alcanceAtaque: 2.5
+  alcanceAtaque: 3.5
   cooldownAtaque: 2
   sensorParede: {fileID: 166939324}
   hitboxAtaque: {fileID: 1788440006}
+--- !u!1 &647974516 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2513455874014802098, guid: bb62358795637bf4a8c2c5a82fd7c2bf, type: 3}
+  m_PrefabInstance: {fileID: 2077791101}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &719836991
 GameObject:
   m_ObjectHideFlags: 0
@@ -65508,7 +65517,7 @@ Transform:
   m_GameObject: {fileID: 1788440004}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 164, y: 57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -65561,7 +65570,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -22.49828, y: 57.370506}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -65571,7 +65580,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 45.99656, y: 57.245678}
   m_EdgeRadius: 0
 --- !u!1 &1794308066
 GameObject:
