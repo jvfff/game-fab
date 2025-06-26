@@ -6,19 +6,24 @@ using UnityEngine.UI;
 public class LoadingScreen : MonoBehaviour
 {
     public Slider barraDeProgresso;
-    public Text textoPorcentagem; // opcional
-    public Index index;
-    public int indexP;
+    public Text textoPorcentagem;
 
-    private void Awake()
-    {
-        index = GetComponent<Index>();
-        indexP = index.indexV;
-    }
     void Start()
     {
-        if(indexP == 0) { CarregarCena("Caverna"); }
-        else { CarregarCena("Deserto"); }
+        switch (Index.Instance.indexFase)
+        {
+            case 0:
+                CarregarCena("Caverna");
+                break;
+            case 1:
+                CarregarCena("Deserto");
+                break;
+            case 2:
+                CarregarCena("TelaFinal");
+                break;
+        }
+
+        Index.Instance.indexFase++; // avança para a próxima
     }
 
     public void CarregarCena(string nomeCena)
