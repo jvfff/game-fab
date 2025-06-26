@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 338bbaa39e4dd9b4c88164af6c40e3cf
+guid: 3f72b0804046a4e4fb42a83f8783a849
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2101128174353869668
-    second: mover_0
+      213: 8589043539101050060
+    second: "Imagem do WhatsApp de 2025-06-25 \xE0(s) 21.06.12_17f73411_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: mover_0
+      name: "Imagem do WhatsApp de 2025-06-25 \xE0(s) 21.06.12_17f73411_0"
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 46b6deb31f4b82d10800000000000000
-      internalID: 2101128174353869668
+      spriteID: cc46b749799623770800000000000000
+      internalID: 8589043539101050060
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      mover_0: 2101128174353869668
+      "Imagem do WhatsApp de 2025-06-25 \xE0(s) 21.06.12_17f73411_0": 8589043539101050060
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
